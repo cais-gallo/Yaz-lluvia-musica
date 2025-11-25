@@ -5,17 +5,36 @@
 </head>
 <body>
     <canvas id="canvas"></canvas>
+    <audio id="backgroundMusic" loop>
+        <source src="me-gustas.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+    <div style="position: fixed; top: 10px; left: 10px; z-index: 1000; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 10px; color: white;">
+        <div>🎵 Me Gustas - Young Tender</div>
+        <button onclick="toggleMusic()" style="background: #FF6B6B; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; color: white; margin-top: 5px;">▶️ Play / ⏸️ Pause</button>
+    </div>
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
+        const music = document.getElementById('backgroundMusic');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         
         const messages = [];
         const fireworks = [];
         const stars = [];
-        const phrases = ['Te quiero Yaz', 'Me encantas amor', 'Eres increíble', 'Te adoro', 'Me fascinas'];
+        const phrases = ['te quiero Yaz', 'me encantas amor', 'eres increíble', 'te adoro', 'me fascinas'];
         const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#6A0572', '#1A535C', '#FF9F1C', '#E71D36', '#2EC4B6'];
+        
+        let musicStarted = false;
+
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+            } else {
+                music.pause();
+            }
+        }
         
         class Star {
             constructor() {
@@ -154,6 +173,10 @@
         
         canvas.addEventListener('click', (e) => {
             fireworks.push(new Firework(e.clientX, e.clientY));
+            if (!musicStarted) {
+                music.play().catch(e => console.log('Click el botón de play para iniciar música'));
+                musicStarted = true;
+            }
         });
         
         window.addEventListener('resize', () => {
@@ -162,6 +185,13 @@
         });
         
         animate();
+
+        setTimeout(() => {
+            if (!musicStarted) {
+                document.querySelector('button').style.background = '#4ECDC4';
+                document.querySelector('button').innerHTML = '🎵 Click aquí para la música';
+            }
+        }, 2000);
     </script>
 </body>
 </html>
