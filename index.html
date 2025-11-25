@@ -6,13 +6,8 @@
 <body>
     <canvas id="canvas"></canvas>
     <audio id="backgroundMusic" loop>
-        <source src="me-gustas.mp3" type="audio/mpeg">
-        Tu navegador no soporta el elemento de audio.
+        <source src="Me-Gustas.mp3" type="audio/mpeg">
     </audio>
-    <div style="position: fixed; top: 10px; left: 10px; z-index: 1000; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 10px; color: white;">
-        <div>🎵 Me Gustas - Young Tender</div>
-        <button onclick="toggleMusic()" style="background: #FF6B6B; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; color: white; margin-top: 5px;">▶️ Play / ⏸️ Pause</button>
-    </div>
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
@@ -28,11 +23,10 @@
         
         let musicStarted = false;
 
-        function toggleMusic() {
-            if (music.paused) {
+        function startMusic() {
+            if (!musicStarted) {
                 music.play();
-            } else {
-                music.pause();
+                musicStarted = true;
             }
         }
         
@@ -173,10 +167,12 @@
         
         canvas.addEventListener('click', (e) => {
             fireworks.push(new Firework(e.clientX, e.clientY));
-            if (!musicStarted) {
-                music.play().catch(e => console.log('Click el botón de play para iniciar música'));
-                musicStarted = true;
-            }
+            startMusic();
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (e.target === canvas) return;
+            startMusic();
         });
         
         window.addEventListener('resize', () => {
@@ -185,13 +181,6 @@
         });
         
         animate();
-
-        setTimeout(() => {
-            if (!musicStarted) {
-                document.querySelector('button').style.background = '#4ECDC4';
-                document.querySelector('button').innerHTML = '🎵 Click aquí para la música';
-            }
-        }, 2000);
     </script>
 </body>
 </html>
